@@ -7,13 +7,8 @@ module.exports = {
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
     port: process.env.DB_PORT || 5432,
-    dialect: process.env.DB_DIALECT || 'postgres',
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false // Render вимагає SSL
-      }
-    }
+    dialect: process.env.DB_DIALECT || 'postgres'
+   
   },
   test: {
     // Для локальних тестів або CI
