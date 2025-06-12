@@ -2,21 +2,21 @@
   "development": {
     "username": "ruser",
     "password": "password",
-    "database": "sportswear_shop_development",
+    "database": "vollmarket_development",
     "host": "127.0.0.1",
     "dialect": "mariadb"
   },
   "test": {
     "username": "ruser",
     "password": "password",
-    "database": "sportswear_shop_test",
+    "database": "vollmarket_test",
     "host": "127.0.0.1",
     "dialect": "mariadb"
   },
   "production": {
     "username": "ruser",
     "password": "password",
-    "database": "sportswear_shop",
+    "database": "vollmarket_shop",
     "host": "127.0.0.1",
     "dialect": "mariadb"
   }
