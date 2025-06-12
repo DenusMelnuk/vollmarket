@@ -43,7 +43,7 @@ function Navbar() {
     <nav className="bg-blue-600 text-white p-4">
       <div className="container mx-auto flex justify-between items-center">
         <Link to="/" className="flex items-center">
-          <img src="/logo.png" alt="Logo" className="h-10 mr-2" />
+          <img src="/logos.png" alt="Logo" className="h-10 mr-2" />
           <span className="text-xl font-bold">VOLLMART</span>
         </Link>
         <button
