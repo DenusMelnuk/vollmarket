@@ -1,51 +1,59 @@
-// 2025042804-create-order.js
 const { DataTypes } = require('sequelize');
 
 module.exports = {
   up: async (queryInterface) => {
-    await queryInterface.createTable('Orders', {
+    // Створюємо ENUM тип окремо
+    await queryInterface.sequelize.query(`
+      CREATE TYPE "enum_orders_status" AS ENUM ('reserved', 'completed', 'cancelled');
+    `);
+
+    await queryInterface.createTable('orders', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true
+        autoIncrement: true,
       },
       userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'Users',
-          key: 'id'
+          model: 'users',
+          key: 'id',
         },
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
       productId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'Products',
-          key: 'id'
+          model: 'products',
+          key: 'id',
         },
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
       quantity: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
       },
       status: {
-        type: DataTypes.ENUM('reserved', 'completed', 'cancelled'),
-        defaultValue: 'reserved'
+        type: 'enum_orders_status',
+        defaultValue: 'reserved',
       },
       createdAt: {
         type: DataTypes.DATE,
-        allowNull: false
+        allowNull: false,
       },
       updatedAt: {
         type: DataTypes.DATE,
-        allowNull: false
-      }
+        allowNull: false,
+      },
     });
   },
+
   down: async (queryInterface) => {
-    await queryInterface.dropTable('Orders');
-  }
+    await queryInterface.dropTable('orders');
+    await queryInterface.sequelize.query(`DROP TYPE IF EXISTS "enum_orders_status";`);
+  },
 };
