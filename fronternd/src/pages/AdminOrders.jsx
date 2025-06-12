@@ -22,7 +22,7 @@ function AdminOrders() {
       return;
     }
 
-    axios.get('http://localhost:3000/api/orders', {
+    axios.get('/orders', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(response => setOrders(response.data))
