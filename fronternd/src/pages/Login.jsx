@@ -15,11 +15,12 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/api/login', form);
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+      const response = await axios.post(`${apiBaseUrl}/login`, form);
       localStorage.setItem('token', response.data.token);
       navigate('/');
     } catch (error) {
-      alert(error.response.data.error);
+      alert(error.response?.data?.error || 'Login error');
     }
   };
 

@@ -45,7 +45,7 @@ module.exports = {
         price: 29.99,
         stock: 100,
         imageUrl: '/uploads/nike-pro.jpg',
-        categoryId: categoryMap['Футболки'],
+        category_id: categoryMap['Футболки'],
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -55,7 +55,7 @@ module.exports = {
         price: 24.99,
         stock: 50,
         imageUrl: '/uploads/adidas-run.jpg',
-        categoryId: categoryMap['Шорти'],
+        category_id: categoryMap['Шорти'],
         createdAt: new Date(),
         updatedAt: new Date()
       }
