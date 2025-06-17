@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
+import api from '../api';
+import config from '../config';
 
 function Login() {
   const { t } = useTranslation();
@@ -60,3 +62,4 @@ function Login() {
 }
 
 export default Login;
+
