@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
+import api from '../api';
+import config from '../config';
 
 function Login() {
   const { t } = useTranslation();
@@ -15,7 +17,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/api/login', form);
+      const response = await api.post('/login', form);
       localStorage.setItem('token', response.data.token);
       navigate('/');
     } catch (error) {
