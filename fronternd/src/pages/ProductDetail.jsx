@@ -32,7 +32,7 @@ function ProductDetail() {
     }
 
     try {
-      await api.post('/cart', { productId: id, quantity });
+      await api.post('/orders', { productId: id, quantity });
       alert(t('product_detail.add_to_cart'));
     } catch (error) {
       alert(error.response?.data?.error || 'An error occurred');
