@@ -331,7 +331,7 @@ function AdminDashboard() {
             <p className="text-gray-600">${product.price}</p>
             <p className="text-gray-500">{t('admin_dashboard.stock')}: {product.stock}</p>
             <p className="text-gray-500">
-              {product.Category ? product.Category.name : t('admin_dashboard.no_category')}
+              {product.category ? product.category.name : t('admin_dashboard.no_category')}
               </p>
             <div className="flex space-x-2 mt-2">
               <button
