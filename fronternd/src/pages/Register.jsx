@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
+import api from '../api';
+import config from '../config';
 
 function Register() {
   const { t } = useTranslation();
@@ -16,7 +18,7 @@ function Register() {
     e.preventDefault();
     try {
       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-      const response = await axios.post('${apiBaseUrl}/register', form);
+      const response = await axios.post(`${apiBaseUrl}/register`, form);
       alert(t('register.success'));
       navigate('/login');
     } catch (error) {
