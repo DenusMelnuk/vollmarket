@@ -16,7 +16,7 @@ function Cart() {
       return;
     }
 
-    api.get('/cart')
+    api.get('/orders')
       .then(response => setCart(response.data))
       .catch(error => console.error(error));
   }, [navigate]);
