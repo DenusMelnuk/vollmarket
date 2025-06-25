@@ -7,7 +7,7 @@ import config from '../config';
 function Cart() {
   const { t } = useTranslation();
   const [allOrders, setAllOrders] = useState([]); // Зберігатиме всі замовлення користувача
-  const [filterStatus, setFilterStatus] = useState('reserved'); // 'reserved', 'processed', 'all'
+  const [filterStatus, setFilterStatus] = useState('reserved'); // 'reserved', 'reserved', 'all'
   const navigate = useNavigate();
 
   // Функція для завантаження замовлень
@@ -61,13 +61,13 @@ function Cart() {
       return; // Скасувати
     }
     try {
-      // Оновлюємо статус конкретного замовлення на 'processed'
-      await api.patch(`/orders/${orderId}/status`, { status: 'processed' });
+      // Оновлюємо статус конкретного замовлення на 'reserved'
+      await api.patch(`/orders/${orderId}/status`, { status: 'reserved' });
 
       // Оновлюємо стан allOrders, щоб відобразити зміну статусу
       setAllOrders(prevOrders =>
         prevOrders.map(order =>
-          order.id === orderId ? { ...order, status: 'processed' } : order
+          order.id === orderId ? { ...order, status: 'reserved' } : order
         )
       );
       alert(t('cart.order_placed_success'));
@@ -93,10 +93,10 @@ function Cart() {
           {t('cart.filter_reserved')} ({allOrders.filter(o => o.status === 'reserved').length})
         </button>
         <button
-          onClick={() => setFilterStatus('processed')}
-          className={`px-4 py-2 mr-2 rounded ${filterStatus === 'processed' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'}`}
+          onClick={() => setFilterStatus('reserved')}
+          className={`px-4 py-2 mr-2 rounded ${filterStatus === 'reserved' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'}`}
         >
-          {t('cart.filter_processed')} ({allOrders.filter(o => o.status === 'processed').length})
+          {t('cart.filter_reserved')} ({allOrders.filter(o => o.status === 'reserved').length})
         </button>
         <button
           onClick={() => setFilterStatus('all')}
@@ -139,8 +139,8 @@ function Cart() {
                   </button>
                 </>
               )}
-              {item.status === 'processed' && (
-                <span className="px-4 py-2 text-green-600 font-semibold">{t('cart.processed_label')}</span>
+              {item.status === 'reserved' && (
+                <span className="px-4 py-2 text-green-600 font-semibold">{t('cart.reserved_label')}</span>
               )}
             </div>
           ))}
@@ -153,8 +153,8 @@ function Cart() {
                         if (window.confirm(t('cart.confirm_checkout_all'))) {
                             // Логіка для оформлення всіх зарезервованих замовлень
                             // Можна зробити окремий запит до бекенду, наприклад:
-                            // api.patch('/orders/bulk-status', { orderIds: filteredOrders.map(o => o.id), status: 'processed' });
-                            alert(t('cart.all_orders_processed'));
+                            // api.patch('/orders/bulk-status', { orderIds: filteredOrders.map(o => o.id), status: 'reserved' });
+                            alert(t('cart.all_orders_reserved'));
                         }
                     }}
                     className="mt-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
