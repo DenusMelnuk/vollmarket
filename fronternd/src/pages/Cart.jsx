@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'; // Додано useMemo
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import api from '../api';
@@ -6,11 +6,11 @@ import config from '../config';
 
 function Cart() {
   const { t } = useTranslation();
-  const [allOrders, setAllOrders] = useState([]); // Зберігатиме всі замовлення користувача
-  const [filterStatus, setFilterStatus] = useState('reserved'); // 'reserved', 'reserved', 'all'
+  const [allOrders, setAllOrders] = useState([]);
+  // Початковий фільтр для відображення "кошика" (зарезервованих замовлень)
+  const [filterStatus, setFilterStatus] = useState('reserved');
   const navigate = useNavigate();
 
-  // Функція для завантаження замовлень
   const fetchOrders = async () => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -20,7 +20,7 @@ function Cart() {
 
     try {
       const response = await api.get('/orders');
-      setAllOrders(response.data); // Зберігаємо всі отримані замовлення
+      setAllOrders(response.data);
     } catch (error) {
       console.error("Error fetching orders:", error.response?.data?.error || error.message);
       alert(t('cart.fetch_error') + (error.response?.data?.error || ''));
@@ -31,7 +31,6 @@ function Cart() {
     fetchOrders();
   }, [navigate, t]);
 
-  // Фільтрація замовлень на основі обраного статусу
   const filteredOrders = useMemo(() => {
     if (filterStatus === 'all') {
       return allOrders;
@@ -39,14 +38,12 @@ function Cart() {
     return allOrders.filter(order => order.status === filterStatus);
   }, [allOrders, filterStatus]);
 
-  // Функція для видалення замовлення (не продукту з кошика!)
   const handleRemove = async (orderId) => {
     if (!window.confirm(t('cart.confirm_remove'))) {
-      return; // Скасувати, якщо користувач не підтвердив
+      return;
     }
     try {
       await api.delete(`/orders/${orderId}`);
-      // Оновлюємо список замовлень після видалення
       setAllOrders(prevOrders => prevOrders.filter(item => item.id !== orderId));
       alert(t('cart.remove_success'));
     } catch (error) {
@@ -55,29 +52,49 @@ function Cart() {
     }
   };
 
-  // Функція для оформлення замовлення
-  const handleCheckout = async (orderId) => {
-    if (!window.confirm(t('cart.confirm_checkout'))) {
-      return; // Скасувати
+  // Функція для "оформлення" замовлення (зміни статусу на completed)
+  const handleCompleteOrder = async (orderId) => {
+    if (!window.confirm(t('cart.confirm_complete_order'))) {
+      return;
     }
     try {
-      // Оновлюємо статус конкретного замовлення на 'reserved'
-      await api.patch(`/orders/${orderId}/status`, { status: 'reserved' });
+      // Оновлюємо статус конкретного замовлення на 'completed'
+      await api.patch(`/orders/${orderId}/status`, { status: 'completed' });
 
       // Оновлюємо стан allOrders, щоб відобразити зміну статусу
       setAllOrders(prevOrders =>
         prevOrders.map(order =>
-          order.id === orderId ? { ...order, status: 'reserved' } : order
+          order.id === orderId ? { ...order, status: 'completed' } : order
         )
       );
-      alert(t('cart.order_placed_success'));
+      alert(t('cart.order_completed_success'));
     } catch (error) {
-      console.error("Error during checkout:", error.response?.data?.error || error.message);
-      alert(error.response?.data?.error || t('cart.checkout_error'));
+      console.error("Error completing order:", error.response?.data?.error || error.message);
+      alert(error.response?.data?.error || t('cart.complete_order_error'));
     }
   };
 
-  // Розрахунок загальної суми для відфільтрованих замовлень
+  // Функція для "скасування" замовлення (зміни статусу на canceled)
+  const handleCancelOrder = async (orderId) => {
+    if (!window.confirm(t('cart.confirm_cancel_order'))) {
+      return;
+    }
+    try {
+      await api.patch(`/orders/${orderId}/status`, { status: 'canceled' });
+
+      setAllOrders(prevOrders =>
+        prevOrders.map(order =>
+          order.id === orderId ? { ...order, status: 'canceled' } : order
+        )
+      );
+      alert(t('cart.order_canceled_success'));
+    } catch (error) {
+      console.error("Error canceling order:", error.response?.data?.error || error.message);
+      alert(error.response?.data?.error || t('cart.cancel_order_error'));
+    }
+  };
+
+
   const total = filteredOrders.reduce((sum, item) => sum + (item.product?.price || 0) * item.quantity, 0);
 
   return (
@@ -93,10 +110,16 @@ function Cart() {
           {t('cart.filter_reserved')} ({allOrders.filter(o => o.status === 'reserved').length})
         </button>
         <button
-          onClick={() => setFilterStatus('reserved')}
-          className={`px-4 py-2 mr-2 rounded ${filterStatus === 'reserved' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'}`}
+          onClick={() => setFilterStatus('completed')}
+          className={`px-4 py-2 mr-2 rounded ${filterStatus === 'completed' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'}`}
         >
-          {t('cart.filter_reserved')} ({allOrders.filter(o => o.status === 'reserved').length})
+          {t('cart.filter_completed')} ({allOrders.filter(o => o.status === 'completed').length})
+        </button>
+        <button
+          onClick={() => setFilterStatus('canceled')}
+          className={`px-4 py-2 mr-2 rounded ${filterStatus === 'canceled' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'}`}
+        >
+          {t('cart.filter_canceled')} ({allOrders.filter(o => o.status === 'canceled').length})
         </button>
         <button
           onClick={() => setFilterStatus('all')}
@@ -132,36 +155,29 @@ function Cart() {
                     {t('cart.remove')}
                   </button>
                   <button
-                    onClick={() => handleCheckout(item.id)} // Передаємо ID замовлення
-                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                    onClick={() => handleCompleteOrder(item.id)}
+                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 mr-2"
                   >
-                    {t('cart.checkout_item')} {/* Змінив текст кнопки */}
+                    {t('cart.complete_order')}
+                  </button>
+                  <button
+                    onClick={() => handleCancelOrder(item.id)}
+                    className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700"
+                  >
+                    {t('cart.cancel_order')}
                   </button>
                 </>
               )}
-              {item.status === 'reserved' && (
-                <span className="px-4 py-2 text-green-600 font-semibold">{t('cart.reserved_label')}</span>
+              {item.status === 'completed' && (
+                <span className="px-4 py-2 text-green-600 font-semibold">{t('cart.completed_label')}</span>
+              )}
+              {item.status === 'canceled' && (
+                <span className="px-4 py-2 text-gray-600 font-semibold">{t('cart.canceled_label')}</span>
               )}
             </div>
           ))}
           <div className="mt-4">
             <p className="text-xl font-semibold">{t('cart.total')}: ${total.toFixed(2)}</p>
-            {/* Загальна кнопка "Оформити всі" (якщо потрібно)
-            {filterStatus === 'reserved' && filteredOrders.length > 0 && (
-                <button
-                    onClick={() => {
-                        if (window.confirm(t('cart.confirm_checkout_all'))) {
-                            // Логіка для оформлення всіх зарезервованих замовлень
-                            // Можна зробити окремий запит до бекенду, наприклад:
-                            // api.patch('/orders/bulk-status', { orderIds: filteredOrders.map(o => o.id), status: 'reserved' });
-                            alert(t('cart.all_orders_reserved'));
-                        }
-                    }}
-                    className="mt-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-                >
-                    {t('cart.checkout_all')}
-                </button>
-            )} */}
           </div>
         </div>
       )}
