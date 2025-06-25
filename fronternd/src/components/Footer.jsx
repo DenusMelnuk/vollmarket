@@ -52,7 +52,7 @@ function Footer() {
           {/* Contact Section */}
           <div>
             <h3 className="text-lg font-semibold mb-4">{t('footer.contact')}</h3>
-            <p className="text-sm">{t('footer.email')}: support@vollmart.com</p>
+            <p className="text-sm">{t('footer.email')}: support@vollmarket.com</p>
             <p className="text-sm">{t('footer.phone')}: +1 (123) 456-7890</p>
             <p className="text-sm">{t('footer.address')}: 123 Sport St, City, Country</p>
             <div className="flex space-x-4 mt-4">
@@ -72,7 +72,7 @@ function Footer() {
         {/* Copyright */}
         <div className="mt-8 border-t border-blue-500 pt-4 text-center">
           <p className="text-sm">
-            &copy; {new Date().getFullYear()} Vollmart Shop. {t('footer.rights_reserved')}
+            &copy; {new Date().getFullYear()} Vollmarket Shop. Denis Melnuk {t('footer.rights_reserved')}
           </p>
         </div>
       </div>
