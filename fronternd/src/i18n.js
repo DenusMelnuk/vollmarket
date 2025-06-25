@@ -25,13 +25,31 @@ const resources = {
         "loading": "Loading..."
       },
       "cart": {
-        "title": "Cart",
-        "empty": "Your cart is empty",
-        "total": "Total",
-        "remove": "Remove",
-        "checkout": "Checkout",
-        "login_to_checkout": "Please login to checkout",
-        "order_placed": "Order placed successfully!"
+    "title": "Your Orders",
+    "empty": "Your order list is empty.",
+    "empty_filtered": "No orders found with this status.",
+    "remove": "Remove",
+    "checkout_item": "Process Order", // Змінив, бо тепер це оформлення окремого замовлення
+    "checkout_all": "Process All Reserved", // Якщо додамо таку кнопку
+    "order_placed_success": "Order status updated successfully!",
+    "login_to_checkout": "Please log in to proceed with checkout.",
+    "fetch_error": "Failed to load orders: ",
+    "remove_error": "Failed to remove order.",
+    "checkout_error": "Failed to process order.",
+    "confirm_remove": "Are you sure you want to remove this order?",
+    "confirm_checkout": "Are you sure you want to process this order?",
+    "confirm_checkout_all": "Are you sure you want to process all reserved orders?",
+    "all_orders_processed": "All reserved orders have been processed.",
+    "total": "Total",
+    "status": "Status",
+    "status_reserved": "Reserved",
+    "status_processed": "Processed",
+    "status_completed": "Completed", // Якщо додамо ще статус
+    "status_cancelled": "Cancelled", // Якщо додамо ще статус
+    "processed_label": "Processed",
+    "filter_reserved": "Reserved",
+    "filter_processed": "Processed",
+    "filter_all": "All Orders"
       },
       "admin_dashboard": {
         "title": "Admin Dashboard",
@@ -117,12 +135,30 @@ const resources = {
       },
       "cart": {
         "title": "Кошик",
-        "empty": "Ваш кошик порожній",
-        "total": "Разом",
-        "remove": "Видалити",
-        "checkout": "Оформити замовлення",
-        "login_to_checkout": "Будь ласка, увійдіть, щоб оформити замовлення",
-        "order_placed": "Замовлення успішно оформлено!"
+         "empty": "Ваш список замовлень порожній.",
+    "empty_filtered": "Немає замовлень з таким статусом.",
+    "remove": "Видалити",
+    "checkout_item": "Оформити",
+    "checkout_all": "Оформити всі зарезервовані",
+    "order_placed_success": "Статус замовлення успішно оновлено!",
+    "login_to_checkout": "Будь ласка, увійдіть, щоб оформити замовлення.",
+    "fetch_error": "Не вдалося завантажити замовлення: ",
+    "remove_error": "Не вдалося видалити замовлення.",
+    "checkout_error": "Не вдалося оформити замовлення.",
+    "confirm_remove": "Ви впевнені, що хочете видалити це замовлення?",
+    "confirm_checkout": "Ви впевнені, що хочете оформити це замовлення?",
+    "confirm_checkout_all": "Ви впевнені, що хочете оформити всі зарезервовані замовлення?",
+    "all_orders_processed": "Усі зарезервовані замовлення оформлено.",
+    "total": "Всього",
+    "status": "Статус",
+    "status_reserved": "Зарезервовано",
+    "status_processed": "Оформлено",
+    "status_completed": "Виконано",
+    "status_cancelled": "Скасовано",
+    "processed_label": "Оформлено",
+    "filter_reserved": "Зарезервовані",
+    "filter_processed": "Оформлені",
+    "filter_all": "Усі замовлення"
       },
       "admin_dashboard": {
         "title": "Панель адміністратора",
